@@ -16,11 +16,12 @@ export class GameComponent implements OnInit {
   private _pokemonSelected: string = '';
   private _pokemons: Pokemon[] = [];
   private _pokemon!: Pokemon;
+  NomJugador: string = '';
 
   get score(): number {
     return this.playerService.score;
   }
-  
+
   get hearts(): Array<any> {
     return Array(this.playerService.lifes);
   }
@@ -56,6 +57,16 @@ export class GameComponent implements OnInit {
     this.newGame();
   }
 
+  rotateImage(event: MouseEvent) {
+    event.preventDefault();
+    if (event.target instanceof HTMLImageElement) {
+      const imgElement = event.target as HTMLImageElement;
+      const currentRotation = parseInt(imgElement.style.transform?.replace('rotate(', '').replace('deg)', '') || '0');
+      const newRotation = (currentRotation + 180) % 360;
+      imgElement.style.transform = `rotate(${newRotation}deg)`;
+    }
+  }
+
   onSelect(pokemonName: string) {
     this._pokemonSelected = pokemonName;
     this._selected = true;
@@ -68,7 +79,7 @@ export class GameComponent implements OnInit {
       this.playerService.decreaseLifes();
       console.log('incorrect');
     }
-    
+
   }
 
   // this function es execute every time that user click in next game
